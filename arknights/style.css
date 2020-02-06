@@ -1,46 +1,69 @@
 html {
-    font-size: x-small;
+    font-family: sans-serif;
+    font-size: small;
+}
+body {
+    background-color: #ededef;
 }
 .button {
     background-color: #313131;
     color: #ffffff;
-    box-shadow: 0px 5px 10px #00000080;
+    box-shadow: 0px 2px 5px #00000080;
     margin: 5px;
-    padding: 10px;
+    padding: 3px 10px;
     display: inline-block;
     text-decoration: none;
 }
 .button.selected {
     background-color: #4495d4;
 }
-#tagArea.filtered .tag {
+.filtered > * {
     opacity: 0.5;
 }
-#tagArea.filtered .tag.matched {
+.filtered > .matched {
     opacity: 1.0;
 }
-#resultArea .result {
-    padding: 5px 10px;
+#resultArea > section {
+    background-color: #ffffff;
+    box-shadow: 0px 2px 5px #00000080;
+    margin: 10px 5px;
+    padding: 0;
 }
-#resultArea .result.satisfied {
-    background-color: #cccccc80;
+#resultArea > section > header {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0 8px;
 }
-#resultArea .pattern.satisfied {
-    background-color: #cccccc80;
+#resultArea > section > header .unit-note {
+    color: #b85b49;
+    font-size: x-small;
+    font-weight: bold;
+}
+#resultArea .pattern > section {
+    background-color: #313131;
+    color: #989898;
+    display: inline-block;
+}
+#resultArea .pattern > section > header {
+    font-size: x-small;
+    padding: 0 5px;
 }
 #resultArea .tag {
-    border: solid 1px #cccccc;
-    border-radius: 5px;
-    padding: 5px;
+    background-color: #555555;
+    color: #313131;
+    font-size: x-small;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 0 2px;
     margin: 5px;
     display: inline-block;
 }
 #resultArea .tag.satisfied {
-    background-color: pink;
+    background-color: #e5e6e1;
 }
 #resultArea .tag.essential {
-    background-color: lightyellow;
+    background-color: #555555;
 }
 #resultArea .tag.essential.satisfied {
-    background-color: orange;
+    background-color: #e5e6e1;
 }

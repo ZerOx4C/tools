@@ -217,38 +217,30 @@ function fillResultElement(resultElement, unitId, patternIdList) {
 function fillResultPatternElement(patternElement, patternId) {
     var pattern = PatternMaster[patternId];
 
-    var tagListElement = patternElement.querySelector(".tag-list");
-    var tagElementOrigin = patternElement.querySelector(".tag");
+    var essentialTagListElement = patternElement.querySelector(".tag-list.essential");
+    var optionalTagListElement = patternElement.querySelector(".tag-list:not(.essential)");
+    var essentialTagElementOrigin = essentialTagListElement.querySelector(".tag");
+    var optionalTagElementOrigin = optionalTagListElement.querySelector(".tag");
     var noteElement = patternElement.querySelector(".note");
-    tagElementOrigin.remove();
+    essentialTagElementOrigin.remove();
+    optionalTagElementOrigin.remove();
 
     patternElement.dataset.id = patternId;
     noteElement.innerHTML = pattern.note;
-
-    var essentialTagElementList = [];
-    var optionalTagElementList = [];
 
     Object.keys(TagMaster).forEach(function(tagId) {
         var tag = TagMaster[tagId];
 
         if (tag.flag & pattern.optionalFlags) {
-            var tagElement = document.importNode(tagElementOrigin, true);
+            var tagElement = document.importNode(optionalTagElementOrigin, true);
             fillResultPatternTagElement(tagElement, tagId);
-            optionalTagElementList.push(tagElement);
+            optionalTagListElement.appendChild(tagElement);
         }
         else if (tag.flag & pattern.essentialFlags) {
-            var tagElement = document.importNode(tagElementOrigin, true);
+            var tagElement = document.importNode(essentialTagElementOrigin, true);
             fillResultPatternTagElement(tagElement, tagId);
-            tagElement.classList.add("essential");
-            essentialTagElementList.push(tagElement);
+            essentialTagListElement.appendChild(tagElement);
         }
-    });
-
-    essentialTagElementList.forEach(function(element) {
-        tagListElement.appendChild(element);
-    });
-    optionalTagElementList.forEach(function(element) {
-        tagListElement.appendChild(element);
     });
 }
 
@@ -260,6 +252,13 @@ function fillResultPatternTagElement(tagElement, tagId) {
 
 function updateResultArea() {
     var resultAreaElement = document.getElementById("resultArea");
+    if (selectedFlags) {
+        resultAreaElement.classList.add("filtered");
+    }
+    else {
+        resultAreaElement.classList.remove("filtered");
+    }
+
     Array.from(resultAreaElement.children).forEach(updateResultElement);
 }
 
@@ -272,13 +271,20 @@ function updateResultElement(resultElement) {
     });
 
     if (anyPatternSatisfied) {
-        resultElement.classList.add("satisfied");
+        resultElement.classList.add("matched");
     }
     else {
-        resultElement.classList.remove("satisfied");
+        resultElement.classList.remove("matched");
     }
 
     var patternListElement = resultElement.querySelector(".pattern-list");
+    if (selectedFlags) {
+        patternListElement.classList.add("filtered");
+    }
+    else {
+        patternListElement.classList.remove("filtered");
+    }
+
     Array.from(patternListElement.children).forEach(updateResultPatternElement);
 }
 
@@ -286,14 +292,17 @@ function updateResultPatternElement(patternElement) {
     var pattern = PatternMaster[patternElement.dataset.id];
 
     if (pattern.essentialFlags & selectedFlags) {
-        patternElement.classList.add("satisfied");
+        patternElement.classList.add("matched");
     }
     else {
-        patternElement.classList.remove("satisfied");
+        patternElement.classList.remove("matched");
     }
 
-    var tagListElement = patternElement.querySelector(".tag-list");
-    Array.from(tagListElement.children).forEach(updateResultPatternTagElement);
+    var essentialTagListElement = patternElement.querySelector(".tag-list.essential");
+    Array.from(essentialTagListElement.children).forEach(updateResultPatternTagElement);
+
+    var optionalTagListElement = patternElement.querySelector(".tag-list:not(.essential)");
+    Array.from(optionalTagListElement.children).forEach(updateResultPatternTagElement);
 }
 
 function updateResultPatternTagElement(tagElement) {
