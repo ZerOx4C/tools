@@ -174,11 +174,13 @@ function fillResultElement(resultElement, unitId, patternIdList) {
     var unit = UnitMaster[unitId];
 
     var unitNameElement = resultElement.querySelector(".unit-name");
+    var unitNoteElement = resultElement.querySelector(".unit-note");
     var patternListElement = resultElement.querySelector(".pattern-list");
     var patternElementOrigin = resultElement.querySelector(".pattern");
     patternElementOrigin.remove();
 
     unitNameElement.innerHTML = unit.name;
+    unitNoteElement.innerHTML = unit.note;
     resultElement.dataset.patternIdList = patternIdList;
 
     patternIdList.forEach(function(patternId) {
