@@ -1,0 +1,12 @@
+.tag {
+    background-color: #313131;
+    color: #ffffff;
+    box-shadow: 0px 5px 10px #00000080;
+    margin: 10px;
+    padding: 10px;
+    display: inline-block;
+    text-decoration: none;
+}
+.selected {
+    background-color: #4495d4;
+}

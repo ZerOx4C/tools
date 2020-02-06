@@ -112,9 +112,47 @@ PATTERN_MASTER_SOURCE.forEach(function(row, index) {
     }
 })
 
+var selectedFlags = 0;
+
+function initializeTagArea() {
+    var tagAreaElement = document.getElementById("tagArea");
+    Array.from(tagAreaElement.children).forEach(function (tagElement) {
+        tagElement.remove();
+    });
+
+    var tagTemplateElement = document.getElementById("tagTemplate");
+    var tagElementOrigin = tagTemplateElement.content.querySelector("a");
+
+    Object.keys(TagMaster).forEach(function(tagId) {
+        var tag = TagMaster[tagId];
+        var tagElement = document.importNode(tagElementOrigin, true);
+        tagElement.dataset.flag = tag.flag;
+        tagElement.text = tag.name;
+        tagAreaElement.appendChild(tagElement);
+    });
+}
+
+function updateTagArea() {
+    var tagAreaElement = document.getElementById("tagArea");
+    Array.from(tagAreaElement.children).forEach(function(tagElement) {
+        if (selectedFlags & tagElement.dataset.flag) {
+            tagElement.classList.add("selected");
+        }
+        else {
+            tagElement.classList.remove("selected");
+        }
+    });
+}
+
+function onTagClicked(tagElement) {
+    selectedFlags ^= tagElement.dataset.flag;
+    updateTagArea();
+}
+
 function onBodyLoaded() {
     console.log("hello");
     console.log(TagMaster);
     console.log(UnitMaster);
     console.log(PatternMaster);
+    initializeTagArea();
 }
