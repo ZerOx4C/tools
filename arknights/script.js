@@ -285,6 +285,12 @@ function onTagClicked(tagElement) {
     updateResultArea();
 }
 
+function onResetClicked() {
+    selectedFlags = 0;
+    updateTagArea();
+    updateResultArea();
+}
+
 function onBodyLoaded() {
     console.log("hello");
     console.log(TagMaster);

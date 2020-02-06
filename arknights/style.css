@@ -1,17 +1,20 @@
-#tagArea .tag {
+html {
+    font-size: x-small;
+}
+.button {
     background-color: #313131;
     color: #ffffff;
     box-shadow: 0px 5px 10px #00000080;
-    margin: 10px;
+    margin: 5px;
     padding: 10px;
     display: inline-block;
     text-decoration: none;
 }
-#tagArea .tag.selected {
+.button.selected {
     background-color: #4495d4;
 }
 #resultArea .result {
-    padding: 10px;
+    padding: 5px 10px;
 }
 #resultArea .result.satisfied {
     background-color: #cccccc80;
@@ -26,9 +29,12 @@
     margin: 5px;
     display: inline-block;
 }
-#resultArea .tag.essential {
+#resultArea .tag.satisfied {
     background-color: pink;
 }
-#resultArea .tag.satisfied {
-    border-color: red;
+#resultArea .tag.essential {
+    background-color: lightyellow;
+}
+#resultArea .tag.essential.satisfied {
+    background-color: orange;
 }
