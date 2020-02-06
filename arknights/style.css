@@ -13,6 +13,12 @@ html {
 .button.selected {
     background-color: #4495d4;
 }
+#tagArea.filtered .tag {
+    opacity: 0.5;
+}
+#tagArea.filtered .tag.matched {
+    opacity: 1.0;
+}
 #resultArea .result {
     padding: 5px 10px;
 }

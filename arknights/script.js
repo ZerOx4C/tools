@@ -1,32 +1,32 @@
 var TAG_MASTER_SOURCE = [
-    [1, "初期", 1],
-    [2, "エリート", 2],
-    [3, "上級エリート", 4],
-    [4, "近距離", 8],
-    [5, "遠距離", 16],
-    [6, "前衛タイプ", 32],
-    [7, "医療タイプ", 64],
-    [8, "先鋒タイプ", 128],
-    [9, "術士タイプ", 256],
-    [10, "狙撃タイプ", 512],
-    [11, "重装タイプ", 1024],
-    [12, "補助タイプ", 2048],
-    [13, "特殊タイプ", 4096],
-    [14, "治療", 8192],
-    [15, "支援", 16384],
-    [16, "火力", 32768],
-    [17, "範囲攻撃", 65536],
-    [18, "減速", 131072],
-    [19, "生存", 262144],
-    [20, "防御", 524288],
-    [21, "弱化", 1048576],
-    [22, "強制移動", 2097152],
-    [23, "牽制", 4194304],
-    [24, "爆発力", 8388608],
-    [25, "召喚", 16777216],
-    [26, "高速再配置", 33554432],
-    [27, "COST回復", 67108864],
-    [28, "ロボット", 134217728],
+    [1, "初期", 1, "しょき"],
+    [2, "エリート", 2, "えりーと"],
+    [3, "上級エリート", 4, "じょうきゅうえりーと"],
+    [4, "近距離", 8, "きんきょり"],
+    [5, "遠距離", 16, "えんきょり"],
+    [6, "前衛タイプ", 32, "ぜんえいたいぷ"],
+    [7, "医療タイプ", 64, "いりょうたいぷ"],
+    [8, "先鋒タイプ", 128, "せんぽうたいぷ"],
+    [9, "術士タイプ", 256, "じゅつしたいぷ"],
+    [10, "狙撃タイプ", 512, "そげきたいぷ"],
+    [11, "重装タイプ", 1024, "じゅうそうたいぷ"],
+    [12, "補助タイプ", 2048, "ほじょたいぷ"],
+    [13, "特殊タイプ", 4096, "とくしゅたいぷ"],
+    [14, "治療", 8192, "ちりょう"],
+    [15, "支援", 16384, "しえん"],
+    [16, "火力", 32768, "かりょく"],
+    [17, "範囲攻撃", 65536, "はんいこうげき"],
+    [18, "減速", 131072, "げんそく"],
+    [19, "生存", 262144, "せいぞん"],
+    [20, "防御", 524288, "ぼうぎょ"],
+    [21, "弱化", 1048576, "じゃくか"],
+    [22, "強制移動", 2097152, "きょうせいいどう"],
+    [23, "牽制", 4194304, "けんせい"],
+    [24, "爆発力", 8388608, "ばくはつりょく"],
+    [25, "召喚", 16777216, "しょうかん"],
+    [26, "高速再配置", 33554432, "こうそくさいはいち"],
+    [27, "COST回復", 67108864, "こすとかいふく"],
+    [28, "ロボット", 134217728, "ろぼっと"],
 ];
 
 var UNIT_MASTER_SOURCE = [
@@ -87,6 +87,8 @@ TAG_MASTER_SOURCE.forEach(function(row) {
     TagMaster[row[0]] = {
         id: row[0],
         name: row[1],
+        lowerName: row[1].toLowerCase(),
+        ruby: row[3],
         flag: row[2],
     };
 });
@@ -113,6 +115,7 @@ PATTERN_MASTER_SOURCE.forEach(function(row, index) {
 })
 
 var selectedFlags = 0;
+var tagFilter = null;
 
 function initializeTagArea() {
     var tagAreaElement = document.getElementById("tagArea");
@@ -127,6 +130,7 @@ function initializeTagArea() {
         var tag = TagMaster[tagId];
         var tagElement = document.importNode(tagElementOrigin, true);
         tagElement.dataset.flag = tag.flag;
+        tagElement.dataset.id = tagId;
         tagElement.text = tag.name;
         tagAreaElement.appendChild(tagElement);
     });
@@ -134,12 +138,32 @@ function initializeTagArea() {
 
 function updateTagArea() {
     var tagAreaElement = document.getElementById("tagArea");
+    if (tagFilter) {
+        tagAreaElement.classList.add("filtered");
+    }
+    else {
+        tagAreaElement.classList.remove("filtered");
+    }
+
     Array.from(tagAreaElement.children).forEach(function(tagElement) {
         if (selectedFlags & tagElement.dataset.flag) {
             tagElement.classList.add("selected");
         }
         else {
             tagElement.classList.remove("selected");
+        }
+
+        if (!tagFilter) {
+            tagElement.classList.remove("matched");
+            return;
+        }
+
+        var tag = TagMaster[tagElement.dataset.id];
+        if (0 <= tag.ruby.indexOf(tagFilter) || 0 <= tag.lowerName.indexOf(tagFilter)) {
+            tagElement.classList.add("matched");
+        }
+        else {
+            tagElement.classList.remove("matched");
         }
     });
 }
@@ -279,6 +303,16 @@ function updateResultPatternTagElement(tagElement) {
     else {
         tagElement.classList.remove("satisfied");
     }
+}
+
+function onTagFilterChanged(tagFilterElement) {
+    if (tagFilterElement.value != "") {
+        tagFilter = tagFilterElement.value.toLowerCase();
+    }
+    else {
+        tagFilter = null;
+    }
+    updateTagArea();
 }
 
 function onTagClicked(tagElement) {
