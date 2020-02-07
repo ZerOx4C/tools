@@ -61,9 +61,3 @@ body {
 #resultArea .tag.satisfied {
     background-color: #e5e6e1;
 }
-#resultArea .tag.essential {
-    background-color: #555555;
-}
-#resultArea .tag.essential.satisfied {
-    background-color: #e5e6e1;
-}
