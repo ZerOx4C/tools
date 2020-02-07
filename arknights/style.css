@@ -20,6 +20,9 @@ body {
 .filtered > * {
     opacity: 0.5;
 }
+.filtered > :not(.matched) .filtered > :not(.matched) {
+    opacity: 1.0;
+}
 .filtered > .matched {
     opacity: 1.0;
 }
