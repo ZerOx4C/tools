@@ -35,6 +35,7 @@ var patternStatusTable = {};
 var unitStatusTable = {};
 
 var tagElementList = [];
+var unitListElement = null;
 var unitElementList = [];
 var unitPatternElementList = [];
 var unitTagElementList = [];
@@ -190,7 +191,7 @@ function initializeUnitListView() {
     unitPatternElementList = [];
     unitTagElementList = [];
 
-    var unitListElement = document.getElementById("unitList");
+    unitListElement = document.getElementById("unitList");
     var unitTemplateElement = document.getElementById("resultTemplate");
     var unitElementOrigin = unitTemplateElement.content.querySelector(".result");
 
@@ -279,6 +280,32 @@ function updateTagListView() {
 }
 
 function updateUnitListView() {
+    var unitEntryList = [];
+
+    unitElementList.forEach(function (unitElement) {
+        var unitId = unitElement.dataset.unitId;
+        var unitStatus = unitStatusTable[unitId];
+        var priority = 1000 - parseInt(unitId, 10);
+
+        if (unitStatus.flagMatched) {
+            priority += 10000;
+        }
+
+        unitEntryList.push({
+            priority: priority,
+            element: unitElement,
+        });
+    });
+
+    unitEntryList.sort(function (lhs, rhs) {
+        return rhs.priority - lhs.priority;
+    });
+
+    unitEntryList.forEach(function (unitEntry) {
+        unitEntry.element.remove();
+        unitListElement.appendChild(unitEntry.element);
+    });
+
     var filtered = 0 < selectedFlags;
 
     unitFilterElementList.forEach(function (element) {
