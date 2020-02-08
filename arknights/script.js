@@ -260,10 +260,6 @@ function onResetClicked() {
 }
 
 function onBodyLoaded() {
-    console.log("hello");
-    console.log(TagMaster);
-    console.log(UnitMaster);
-    console.log(PatternMaster);
     initializeTagArea();
     initializePatternArea();
     updateTagArea();
