@@ -14,8 +14,10 @@ UNIT_MASTER_SOURCE.forEach(function(row) {
     UnitMaster[row[1]] = {
         id: row[1],
         name: row[0],
-        rarity: row[2],
-        note: row[3],
+        lowerName: row[0].toLowerCase(),
+        ruby: row[2],
+        rarity: row[3],
+        note: row[4],
     };
 });
 
@@ -36,6 +38,7 @@ var unitStatusTable = {};
 
 var tagFilterElement = null;
 var tagElementList = [];
+var unitFilterElement = null;
 var unitListElement = null;
 var unitElementList = [];
 var unitPatternElementList = [];
@@ -43,6 +46,7 @@ var unitTagElementList = [];
 
 var selectedFlags = 0;
 var tagFilter = "";
+var unitFilter = "";
 
 function getTagIdListByFlags(flags) {
     var ret = [];
@@ -152,11 +156,25 @@ function updatePatetrnStatus() {
 function updateUnitStatus() {
     Object.keys(unitStatusTable).forEach(function (unitId) {
         var unitStatus = unitStatusTable[unitId];
+        var unit = UnitMaster[unitId];
 
         unitStatus.flagMatched = unitStatus.patternIdList.some(function (patternId) {
             var patternStatus = patternStatusTable[patternId]
             return patternStatus.flagMatched;
         });
+
+        if (unitFilter == "") {
+            unitStatus.filterMatched = true;
+        }
+        else if (0 <= unit.ruby.indexOf(unitFilter)) {
+            unitStatus.filterMatched = true;
+        }
+        else if (0 <= unit.lowerName.indexOf(unitFilter)) {
+            unitStatus.filterMatched = true;
+        }
+        else {
+            unitStatus.filterMatched = false;
+        }
     });
 }
 
@@ -187,6 +205,7 @@ function initializeUnitListView() {
     unitPatternElementList = [];
     unitTagElementList = [];
 
+    unitFilterElement = document.getElementById("unitFilter");
     unitListElement = document.getElementById("unitList");
     var unitTemplateElement = document.getElementById("resultTemplate");
     var unitElementOrigin = unitTemplateElement.content.querySelector(".result");
@@ -299,6 +318,7 @@ function updateUnitListView() {
     unitElementList.forEach(function (unitElement) {
         var unitStatus = unitStatusTable[unitElement.dataset.unitId];
         unitElement.classList.toggle("shade", 0 < selectedFlags && !unitStatus.flagMatched);
+        unitElement.classList.toggle("hide", !unitStatus.filterMatched);
     });
 
     unitPatternElementList.forEach(function (patternElement) {
@@ -317,6 +337,13 @@ function onTagFilterChanged() {
 
     updateTagStatus();
     updateTagListView();
+}
+
+function onUnitFilterChanged() {
+    unitFilter = unitFilterElement.value.toLowerCase();
+
+    updateUnitStatus();
+    updateUnitListView();
 }
 
 function onTagClicked(tagElement) {
@@ -341,6 +368,14 @@ function onTagResetClicked() {
     updateUnitStatus();
 
     updateTagListView();
+    updateUnitListView();
+}
+
+function onUnitResetClicked() {
+    unitFilter = "";
+    unitFilterElement.value = "";
+
+    updateUnitStatus();
     updateUnitListView();
 }
 
