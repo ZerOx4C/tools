@@ -181,7 +181,11 @@ function updateResultArea() {
 function updateResultElement(resultElement) {
     var anyPatternSatisfied = resultElement.dataset.patternIdList.split(",").some(function(patternId) {
         var pattern = PatternMaster[patternId];
-        if (pattern.essentialFlags & selectedFlags) {
+
+        if (pattern.essentialFlags <= 0 && pattern.optionalFlags & selectedFlags) {
+            return true;
+        }
+        else if (pattern.essentialFlags & selectedFlags) {
             return true;
         }
     });
@@ -207,7 +211,10 @@ function updateResultElement(resultElement) {
 function updateResultPatternElement(patternElement) {
     var pattern = PatternMaster[patternElement.dataset.id];
 
-    if (pattern.essentialFlags & selectedFlags) {
+    if (pattern.essentialFlags <= 0 && pattern.optionalFlags & selectedFlags) {
+        patternElement.classList.add("matched");
+    }
+    else if (pattern.essentialFlags & selectedFlags) {
         patternElement.classList.add("matched");
     }
     else {
