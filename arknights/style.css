@@ -17,6 +17,12 @@ body {
 .button.selected {
     background-color: #4495d4;
 }
+.editbox {
+    background-color: #00000000;
+    box-shadow: 0 3px 10px -3px #00000080 inset;
+    border: none;
+    padding: 5px 10px;
+}
 .shade {
     opacity: 0.5;
 }
