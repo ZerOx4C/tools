@@ -34,6 +34,7 @@ var tagStatusTable = {};
 var patternStatusTable = {};
 var unitStatusTable = {};
 
+var tagFilterElement = null;
 var tagElementList = [];
 var unitListElement = null;
 var unitElementList = [];
@@ -162,6 +163,7 @@ function updateUnitStatus() {
 function initializeTagListView() {
     tagElementList = [];
 
+    tagFilterElement = document.getElementById("tagFilter");
     var tagListElement = document.getElementById("tagList");
     var tagTemplateElement = document.getElementById("tagTemplate");
     var tagElementOrigin = tagTemplateElement.content.querySelector("a");
@@ -310,7 +312,7 @@ function updateUnitListView() {
     });
 }
 
-function onTagFilterChanged(tagFilterElement) {
+function onTagFilterChanged() {
     tagFilter = tagFilterElement.value.toLowerCase();
 
     updateTagStatus();
@@ -329,8 +331,10 @@ function onTagClicked(tagElement) {
     updateUnitListView();
 }
 
-function onResetClicked() {
+function onTagResetClicked() {
     selectedFlags = 0;
+    tagFilter = "";
+    tagFilterElement.value = "";
 
     updateTagStatus();
     updatePatetrnStatus();
