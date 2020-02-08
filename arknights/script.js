@@ -17,7 +17,7 @@ UNIT_MASTER_SOURCE.forEach(function(row) {
         rarity: row[2],
         note: row[3],
     };
-})
+});
 
 var PatternMaster = {};
 PATTERN_MASTER_SOURCE.forEach(function(row, index) {
@@ -28,7 +28,7 @@ PATTERN_MASTER_SOURCE.forEach(function(row, index) {
         optionalFlags: row[2],
         note: row[3],
     }
-})
+});
 
 var selectedFlags = 0;
 var tagFilter = null;
