@@ -17,13 +17,10 @@ body {
 .button.selected {
     background-color: #4495d4;
 }
-.filtered > * {
+.shade {
     opacity: 0.5;
 }
-.filtered > :not(.matched) .filtered > :not(.matched) {
-    opacity: 1.0;
-}
-.filtered > .matched {
+.shade .shade {
     opacity: 1.0;
 }
 #unitList > section {

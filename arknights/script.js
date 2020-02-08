@@ -40,9 +40,6 @@ var unitElementList = [];
 var unitPatternElementList = [];
 var unitTagElementList = [];
 
-// NOTE: workaround.
-var unitFilterElementList = [];
-
 var selectedFlags = 0;
 var tagFilter = "";
 
@@ -169,9 +166,6 @@ function initializeTagListView() {
     var tagTemplateElement = document.getElementById("tagTemplate");
     var tagElementOrigin = tagTemplateElement.content.querySelector("a");
 
-    // NOTE: workaround.
-    tagListElement.classList.add("filtered");
-
     Array.from(tagListElement.children).forEach(function (tagElement) {
         tagElement.remove();
     });
@@ -195,9 +189,6 @@ function initializeUnitListView() {
     var unitTemplateElement = document.getElementById("resultTemplate");
     var unitElementOrigin = unitTemplateElement.content.querySelector(".result");
 
-    // NOTE: workaround.
-    unitFilterElementList.push(unitListElement);
-
     Array.from(unitListElement.children).forEach(function (unitElement) {
         unitElement.remove();
     });
@@ -215,9 +206,6 @@ function fillUnitElement(unitElement, unitId) {
     var unitNoteElement = unitElement.querySelector(".unit-note");
     var patternListElement = unitElement.querySelector(".pattern-list");
     var patternElementOrigin = unitElement.querySelector(".pattern");
-
-    // NOTE: workaround.
-    unitFilterElementList.push(patternListElement);
 
     var unitStatus = unitStatusTable[unitId];
     var unit = UnitMaster[unitId];
@@ -275,7 +263,7 @@ function updateTagListView() {
     tagElementList.forEach(function (tagElement) {
         var tagStatus = tagStatusTable[tagElement.dataset.tagId];
         tagElement.classList.toggle("selected", tagStatus.flagMatched);
-        tagElement.classList.toggle("matched", tagStatus.filterMatched);
+        tagElement.classList.toggle("shade", !tagStatus.filterMatched);
     });
 }
 
@@ -306,28 +294,19 @@ function updateUnitListView() {
         unitListElement.appendChild(unitEntry.element);
     });
 
-    var filtered = 0 < selectedFlags;
-
-    unitFilterElementList.forEach(function (element) {
-        element.classList.toggle("filtered", filtered);
-    });
-
     unitElementList.forEach(function (unitElement) {
         var unitStatus = unitStatusTable[unitElement.dataset.unitId];
-        unitElement.classList.toggle("matched", unitStatus.flagMatched);
+        unitElement.classList.toggle("shade", 0 < selectedFlags && !unitStatus.flagMatched);
     });
 
     unitPatternElementList.forEach(function (patternElement) {
         var patternStatus = patternStatusTable[patternElement.dataset.patternId];
-        patternElement.classList.toggle("matched", patternStatus.flagMatched);
+        patternElement.classList.toggle("shade", 0 < selectedFlags && !patternStatus.flagMatched);
     });
 
     unitTagElementList.forEach(function (tagElement) {
         var tagStatus = tagStatusTable[tagElement.dataset.tagId];
         tagElement.classList.toggle("satisfied", tagStatus.flagMatched);
-
-        // NOTE: workaround.
-        tagElement.classList.add("matched");
     });
 }
 
