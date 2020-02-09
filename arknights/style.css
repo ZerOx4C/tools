@@ -75,6 +75,6 @@ body {
     margin: 0 5px;
     display: inline-block;
 }
-#unitList .tag.satisfied {
+#unitList .tag.matched {
     background-color: #e5e6e1;
 }
