@@ -137,19 +137,34 @@ function updatePatetrnStatus() {
     Object.keys(patternStatusTable).forEach(function (patternId) {
         var patternStatus = patternStatusTable[patternId];
 
-        patternStatus.flagMatched = patternStatus.essentialTagIdList.some(function (tagId) {
+        patternStatus.essentialMatchedCount = 0;
+        patternStatus.essentialTagIdList.forEach(function (tagId) {
             var tagStatus = tagStatusTable[tagId];
-            return tagStatus.flagMatched;
+            if (tagStatus.flagMatched) {
+                ++patternStatus.essentialMatchedCount;
+            }
         });
 
-        if (patternStatus.flagMatched || 0 < patternStatus.essentialTagIdList.length) {
-            return;
+        patternStatus.optionalMatchedCount = 0;
+        patternStatus.optionalTagIdList.forEach(function (tagId) {
+            var tagStatus = tagStatusTable[tagId];
+            if (tagStatus.flagMatched) {
+                ++patternStatus.optionalMatchedCount;
+            }
+        });
+
+        if (0 < patternStatus.essentialMatchedCount) {
+            patternStatus.flagMatched = true;
         }
-
-        patternStatus.flagMatched = patternStatus.optionalTagIdList.some(function (tagId) {
-            var tagStatus = tagStatusTable[tagId];
-            return tagStatus.flagMatched;
-        });
+        else if (0 < patternStatus.essentialTagIdList.length) {
+            patternStatus.flagMatched = false;
+        }
+        else if (0 < patternStatus.optionalMatchedCount) {
+            patternStatus.flagMatched = true;
+        }
+        else {
+            patternStatus.flagMatched = false;
+        }
     });
 }
 
@@ -158,9 +173,24 @@ function updateUnitStatus() {
         var unitStatus = unitStatusTable[unitId];
         var unit = UnitMaster[unitId];
 
-        unitStatus.flagMatched = unitStatus.patternIdList.some(function (patternId) {
-            var patternStatus = patternStatusTable[patternId]
-            return patternStatus.flagMatched;
+        unitStatus.maxEssentialMatchedCount = 0;
+        unitStatus.maxOptionalMatchedCount = 0;
+        unitStatus.flagMatched = false;
+
+        unitStatus.patternIdList.forEach(function (patternId) {
+            var patternStatus = patternStatusTable[patternId];
+
+            if (unitStatus.maxEssentialMatchedCount < patternStatus.essentialMatchedCount) {
+                unitStatus.maxEssentialMatchedCount = patternStatus.essentialMatchedCount;
+            }
+
+            if (unitStatus.maxOptionalMatchedCount < patternStatus.optionalMatchedCount) {
+                unitStatus.maxOptionalMatchedCount = patternStatus.optionalMatchedCount;
+            }
+
+            if (!unitStatus.flagMatched) {
+                unitStatus.flagMatched = patternStatus.flagMatched;
+            }
         });
 
         if (unitFilter == "") {
@@ -296,20 +326,41 @@ function updateUnitListView() {
     unitElementList.forEach(function (unitElement) {
         var unitId = unitElement.dataset.unitId;
         var unitStatus = unitStatusTable[unitId];
-        var priority = 1000 - parseInt(unitId, 10);
+        var unit = UnitMaster[unitId];
 
+        var priority = 0;
         if (unitStatus.flagMatched) {
-            priority += 10000;
+            ++priority;
         }
 
         unitEntryList.push({
+            unitId: parseInt(unitId, 10),
+            rarity: unit.rarity,
+            maxEssentialMatchedCount: unitStatus.maxEssentialMatchedCount,
+            maxOptionalMatchedCount: unitStatus.maxOptionalMatchedCount,
             priority: priority,
             element: unitElement,
         });
     });
 
     unitEntryList.sort(function (lhs, rhs) {
-        return rhs.priority - lhs.priority;
+        if (lhs.priority != rhs.priority) {
+            return rhs.priority - lhs.priority;
+        }
+
+        if (lhs.maxEssentialMatchedCount != rhs.maxEssentialMatchedCount) {
+            return rhs.maxEssentialMatchedCount - lhs.maxEssentialMatchedCount;
+        }
+
+        if (lhs.maxOptionalMatchedCount != rhs.maxOptionalMatchedCount) {
+            return rhs.maxOptionalMatchedCount - lhs.maxOptionalMatchedCount;
+        }
+
+        if (lhs.rarity != rhs.rarity) {
+            return rhs.rarity - lhs.rarity;
+        }
+
+        return lhs.unitId - rhs.unitId;
     });
 
     unitEntryList.forEach(function (unitEntry) {
