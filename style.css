@@ -1,0 +1,23 @@
+body {
+    background-color: #202020;
+    color: #ffffff;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+nav li {
+    display: inline-block;
+    margin: 5px;
+}
+nav a {
+    background-color: #ffffff20;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    display: inline-block;
+}
+nav a:hover {
+    background-color: #ffffff40;
+}
