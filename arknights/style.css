@@ -44,6 +44,11 @@ body {
     font-size: 14px;
     padding: 0 8px;
 }
+#unitList > section > header .unit-rarity {
+    color: #999999;
+    font-size: 12px;
+    padding: 0 5px 0 0;
+}
 #unitList > section > header .unit-note {
     color: #b85b49;
     font-size: 12px;

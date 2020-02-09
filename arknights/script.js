@@ -223,6 +223,7 @@ function initializeUnitListView() {
 }
 
 function fillUnitElement(unitElement, unitId) {
+    var unitRarityElement = unitElement.querySelector(".unit-rarity");
     var unitNameElement = unitElement.querySelector(".unit-name");
     var unitNoteElement = unitElement.querySelector(".unit-note");
     var patternListElement = unitElement.querySelector(".pattern-list");
@@ -231,6 +232,7 @@ function fillUnitElement(unitElement, unitId) {
     var unitStatus = unitStatusTable[unitId];
     var unit = UnitMaster[unitId];
     unitElement.dataset.unitId = unitId;
+    unitRarityElement.innerHTML = "★" + unit.rarity;
     unitNameElement.innerHTML = unit.name;
     unitNoteElement.innerHTML = unit.note;
 
