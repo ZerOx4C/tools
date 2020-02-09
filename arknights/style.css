@@ -52,6 +52,15 @@ body {
     font-size: 12px;
     padding: 0 5px 0 0;
 }
+.unit-rarity.rarity6 {
+    color: #f3943b !important;
+}
+.unit-rarity.rarity5 {
+    color: #ebe860 !important;
+}
+.unit-rarity.rarity4 {
+    color: #baaeff !important;
+}
 #unitList .unit > header .unit-note {
     color: #b85b49;
     font-size: 12px;

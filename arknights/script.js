@@ -263,6 +263,7 @@ function fillUnitElement(unitElement, unitId) {
     var unit = UnitMaster[unitId];
     unitElement.dataset.unitId = unitId;
     unitRarityElement.innerHTML = "★" + unit.rarity;
+    unitRarityElement.classList.add("rarity" + unit.rarity);
     unitNameElement.innerHTML = unit.name;
     unitNoteElement.innerHTML = unit.note;
 
